@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Load the Paper.js library -->
+<script type="text/javascript" src="paper.js"></script>
+<!-- Define inlined PaperScript associate it with myCanvas -->
+<script type="text/paperscript" canvas="myCanvas" resize="true">
+
+function Circle(x, y, diameter, color){
+	this.diameter = diameter;
+	this.position = new Point(x, y);
+	this.scale = 1.0;
+	this.color = color;
+	this.circle = new Path.Circle(this.position, this.diameter);
+	this.circle.fillColor = this.color;
+}
+
+	Circle.prototype.setScale = function(scale){
+		this.circle.scale(1.0 / this.scale);
+		this.scale = scale;
+	}
+
+function Background(){
+
+	var gridLimit = 20;
+	var diameter = 50;
+	var offset = 100;
+
+	var circles = this.circles = new Array(gridLimit);
+
+	this.init = function(){
+
+		for( var i = 0; i < gridLimit; i++ ){
+			circles[i] = new Array();
+			for( var j = 0; j < gridLimit; j++){
+				circles[i][j] = new Circle(i * offset, j * offset, diameter, 'blue')
+			}
+		}
+	}
+
+	this.sizeCell = function(xCell, yCell, diameterPercentage){
+		circles[xCell][yCell].bounds.width = diameter * diameterPercentage;
+		circles[xCell][yCell].bounds.height = diameter * diameterPercentage;
+	}
+
+}
+
+var bg = new Background;
+
+bg.init();
+
+console.log(bg.circles[1][1]);
+
+var c = bg.circles[1][1];
+
+c.setScale(0.5);
+c.setScale(2.0);
+c.setScale(1.0);
+
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" resize></canvas>
+</body>
+</html>
